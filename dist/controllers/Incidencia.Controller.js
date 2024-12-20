@@ -1,7 +1,4 @@
  const pool = require('../DB/postgres');
-const { findWAUsers, findIncidenciaData } = require('../waUtils')
-
-const { sendWANotification, sendImages } = require('./WA.Controller')
 
 
 
@@ -266,7 +263,6 @@ exports.create_incidencia = async (req, res) => {
         finalEquipos
     } = req.body 
 
-    const waUsers = await findWAUsers(cliente);
 
       
 
@@ -340,12 +336,7 @@ exports.create_incidencia = async (req, res) => {
     const parseQueryRefacciones1 = queryRefacciones1.substring(0, queryRefacciones1.length - 1);
     var response3 = await pool.query(parseQueryRefacciones1);
 
-	if(estatus == 'En espera de aprobación'){
-		const incidenciaData1 = await findIncidenciaData(idIncidenciaNew)
-    if (waUsers && waUsers.length) {
-     await sendWANotification(waUsers, incidenciaData1)
-    }
-	}
+	
 
     
     res
@@ -378,7 +369,6 @@ exports.update_incidencia = async(req, res) => {
         finalEquipos
     } = req.body 
     const id = req.params.id;
-    const waUsers = await findWAUsers(cliente);
 
 	console.log('-----edit------', finalEquipos)
 
@@ -742,10 +732,7 @@ exports.uploadImages = async(req, res) => {
         const parseQueryImages = queryImages.substring(0, queryImages.length - 1);
         var response3 = await pool.query(parseQueryImages);
         
-        const waUsers = await findWAUsers(cliente);
-        if (waUsers && waUsers.length) {
-            await sendImages(waUsers, id)
-        }
+        
         
 
     }
